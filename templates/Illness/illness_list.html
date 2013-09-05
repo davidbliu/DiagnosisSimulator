@@ -4,7 +4,8 @@
 	</head>
 <body>
 <h1> Illnesses List </h1>
-
+<a href = '/simulator/3'>Take the Quiz!</a> <span>|<span>
+<a href = '/add_illness_form'>Add new illness</a>
 {% for entry in entries %}
 <ul><a href = '/illness_form/{{entry.illness.id}}'>{{entry.illness}}</a>
 	{% for symptom in entry.symptoms %}

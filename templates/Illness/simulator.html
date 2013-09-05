@@ -1,0 +1,49 @@
+{% load static %}
+<html>
+<head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script type = 'text/javascript'>
+	var illness = '{{illness}}'
+	</script>
+	<script type = 'text/javascript' src = '{% static 'js/simulator.js' %}'></script>
+	<style type = 'text/css'>
+	/*.symptom_type_div {
+		border: 1px dotted black;
+		padding: 5px;
+		display: inline-block;
+		background-color: red;
+	}*/
+	.symptom_type_div:hover {
+		cursor: pointer;
+		font-weight: bold;
+	}
+	.patient_responses {
+		border: 1px solid black;
+		height: 200px;
+		width: 400px;
+		position: absolute;
+		left: 400px;
+		overflow: auto;
+	}
+	</style>
+</head>
+
+<body>
+<h1>Simulator for illness : {{ illness.name }}</h1>
+<a href = '/list'>Back to List</a><br>
+<div class = 'patient_responses'>
+	<b>Patient Responses</b>
+	<div class = 'responses'></div>
+</div>
+<b>Choose a part of the patient to examine:</b><br>
+{% for symptom_type in symptom_types %}
+<div class = 'symptom_type_div' id =  '{{symptom_type}}'>{{symptom_type}}</div>
+{% endfor %}
+
+<ul>
+	{% for symptom in symptoms %}
+	<li>{{ symptom }}</li>
+	{% endfor %}
+</ul>
+</body>
+</html>

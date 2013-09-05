@@ -1,8 +1,10 @@
 <html>
 <head>
 </head>
+
 <body>
 	<h1> Illness Form for {{illness}} </h1>
+	<a href = '/list' > Back to List </a>
 	<ul> Symptoms
 		{% for symptom in symptoms %}
 		<li> {{symptom.description}} </li>

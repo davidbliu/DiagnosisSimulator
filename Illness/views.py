@@ -24,12 +24,26 @@ def symptoms_clues_view(request):
 	args['symptoms'] = Symptom.objects.filter( illness = Illness.objects.get(id = 2))
 	return render_to_response('clues.html', args)
 
-#builds form for entering in new symptoms
+# below are all the forms -----------------------------------------------------------------------------------
+class IllnessForm(ModelForm):
+	class Meta:
+		model = Illness
+def add_illness_form(request):
+	if request.method == "POST":
+		posted_form = IllnessForm(request.POST)
+		if posted_form.is_valid():
+			posted_form.save()
+			return HttpResponseRedirect('/list')
+	args = {}
+	args.update(csrf(request))
+	args['illness_form'] = IllnessForm()
+	return render_to_response('Illness/add_illness_form.html',args)
+
+
+# builds form for entering in new symptoms
 class SymptomForm (ModelForm):
 	class Meta:
 		model = Symptom
-
-#allows users to enter new symptoms for the illness specified by illnessID in url
 def illness_form (request, illnessID = '0'):
 	illness = Illness.objects.get(id = illnessID)
 	if request.method == "POST":

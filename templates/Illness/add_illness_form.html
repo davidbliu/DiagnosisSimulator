@@ -1,0 +1,10 @@
+<html>
+<body>
+	<h1> add illness form </h1>
+	<form method = "POST" action = "">
+		{% csrf_token %}
+		{{illness_form}}
+		<input type = 'submit' name = 'submit' value = 'submit'/>
+	</form>
+	</body>
+</html>

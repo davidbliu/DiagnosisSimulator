@@ -1,0 +1,7 @@
+{% if symptoms|length == 0 %}
+<br><span> I have no problems in this area </span>
+{% endif %}
+{% for symptom in symptoms %}
+<br><span>{{ symptom }}</span>
+{% endfor %}
+<br>
