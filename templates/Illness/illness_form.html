@@ -1,0 +1,26 @@
+<html>
+<head>
+</head>
+<body>
+	<h1> Illness Form for {{illness}} </h1>
+	<ul> Symptoms
+		{% for symptom in symptoms %}
+		<li> {{symptom.description}} </li>
+		{% endfor %}
+	</ul>
+	<b> choose symptom to add </b><br>
+	{% for symptom in all_symptoms %}
+	<form method = "post" action = ""> 
+		{% csrf_token %}
+		<input name = 'submit_existing' value = '{{symptom.description}}' type = 'submit' /> 
+	</form>
+	{% endfor %}
+	<b> or create a custom symptom </b>
+	<form method = 'post' action = ''>
+		{% csrf_token %}
+		{{symptom_form}}
+		<input type = 'submit' name = 'submit' value = 'submit' />
+	</form>
+
+</body>
+</html>

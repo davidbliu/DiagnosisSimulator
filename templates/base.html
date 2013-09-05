@@ -1,0 +1,16 @@
+<html>
+<head>
+	<title> Illness List </title>
+	</head>
+<body>
+<h1> Illnesses List </h1>
+
+{% for illness in illnesses %}
+<ul> <a href = '/illness_form/{{illness.id}}'>{{illness.illness}}</a>
+	{% for symptom in illness.symptoms %}
+	<li> {{symptom.symptom.description}} ({{symptom.symptom.symptom_type}}) </li>
+	{% endfor %}
+</ul>
+{% endfor %}
+</body>
+</html>
