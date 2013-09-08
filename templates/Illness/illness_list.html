@@ -1,10 +1,6 @@
-<html>
-<head>
-	<title> Illness List </title>
-	</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
 <h1> Illnesses List </h1>
-<a href = '/simulator/3'>Take the Quiz!</a> <span>|<span>
 <a href = '/add_illness_form'>Add new illness</a>
 {% for entry in entries %}
 <ul><a href = '#'>{{entry.illness}}</a> (<a href = '/illness_form/{{entry.illness.id}}' >edit</a>)
@@ -13,5 +9,5 @@
 	{% endfor %}
 </ul>
 {% endfor %}
-</body>
-</html>
+
+{% endblock content %}

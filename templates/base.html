@@ -1,7 +1,11 @@
 <html>
 <head>
+	{% block head %}{% endblock head %}
 	<title> Diagnosis Simulator </title>
 	<style type = 'text/css'>
+	html {
+		font-family: georgia;
+	}
 	.sidebar {
 		/*background-color: #4099FF;*/
 		/*width: 200px;*/
@@ -50,7 +54,7 @@
 		color: #fff;
 	}
 	.content {
-		background-color:red;
+		/*background-color:red;*/
 		/*width:500px;*/
 		/*height:500px;*/
 		display:inline-block;
@@ -66,14 +70,13 @@
 		<u1>
 			<li><a href = "#">Home</a></li>
 			<li><a href = "#">Edit Illnesses</a></li>
-			<li><a href = "#">Illness Handbook</a></li>
-			<li><a href = "#">Play Simulation Game</a></li>
+			<li><a href = "/list">Illness Handbook</a></li>
+			<li><a href = "/simulator/1">Play Simulation Game</a></li>
 			<li><a href = "#">Diagnose Me</a></li>
 		<u1>
 	</div>
 </div>
 <div class = 'content'>
-	<span> here is some content for you to see </span>
 	{% block content %}{% endblock content %}
 </div>
 </body>
