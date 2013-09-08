@@ -17,6 +17,12 @@ head_symptom_types.append('ears')
 head_symptom_types.append('hair')
 head_symptom_types.append('face')
 
+arm_symptom_types = []
+arm_symptom_types.append('forearm')
+arm_symptom_types.append('hand')
+arm_symptom_types.append('elbow')
+arm_symptom_types.append('upper arm')
+
 illness_list = []
 illness_list.append('flu')
 illness_list.append('cold')
@@ -37,6 +43,10 @@ for htype in head_symptom_types:
 	symptom_type = SymptomType( body_area = BodyArea.objects.get(name = 'head'), name = htype)
 	symptom_type.save()
 
+for atype in arm_symptom_types:
+	symptom_type = SymptomType( body_area = BodyArea.objects.get(name = 'arms'), name = atype) 
+	symptom_type.save()
 for illness in illness_list:
 	ill = Illness(name = illness)
 	ill.save()
+

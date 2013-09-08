@@ -31,35 +31,28 @@ function searchSymptoms() {
       dataType: 'json',
       data: {filter_term: filter_term},
       success:function(data){
-        // console.log(data);
         var old_symptoms = document.getElementsByClassName("old_symptom");
-        console.log(old_symptoms);
         var bad_symptoms = data.bad_symptoms;
-        console.log(bad_symptoms);
         for (var i = 0; i<old_symptoms.length; i++)
         {
-          old_symptoms[i].style.visibility = 'visible';
           var id = old_symptoms[i].getAttribute('id');
-          if (bad_symptoms.indexOf(id) >= 0)
+          var index = bad_symptoms.indexOf(id);
+          if (index == -1) //its not a bad symptom
           {
-            old_symptoms[i].style.visibility = 'hidden';
+            old_symptoms[i].style.display = 'block';
+          }
+          else
+          {
+            old_symptoms[i].style.display = 'none';
           }
         }
-        // console.log(old_symptoms);
-
-        // console.log(data.symptom_list)
-        // for (var i = 0; i<data.symptom_list.length; i++) {
-        //   console.log(data.symptom_list[i]);
-        //   $('.responses').prepend('<br><span>'+ data.symptom_list[i]+ '</span>')
-        // }
       },
       complete:function(){},
       error:function (xhr, textStatus, thrownError){}
   });
 }
 $(document).ready(function(){
-    $('.submit_search_button').click(function(){
-        // alert('you clicked the searchBar');
-        searchSymptoms();
+    $('.search_term').keypress(function(){
+      searchSymptoms();
     });
 });

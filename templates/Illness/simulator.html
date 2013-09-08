@@ -7,9 +7,7 @@
 	</script>
 	<script type = 'text/javascript' src = '{% static 'js/simulator.js' %}'></script>
 	<style type = 'text/css'>
-	.symptom_type_div {
-	}
-	.symptom_type_div:hover {
+	.symptom_type_class:hover {
 		cursor: pointer;
 		font-weight: bold;
 	}
@@ -65,10 +63,17 @@
 <div id = 'content_area'>
 	<b>Choose a part of the patient to examine:</b><br>
 	<div class = 'body_area'>
-		<!-- <img src = '{% static "images/blankBody.jpg" %}' width = 200></img> -->
-		{% for symptom_type in symptom_types %}
-		<div class = 'symptom_type_div' id =  '{{symptom_type.name}}'>{{symptom_type.name}}</div>
-	{% endfor %}
+		<ul>
+			{% for part in body_parts %}
+			<li> {{part.general_area.name}}
+				<ul> 
+					{% for stype in part.symptom_types %}
+					<li class = 'symptom_type_class'>{{stype.name}}</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
 	<div id = 'response_wrapper'>
 		<b>Patient Responses</b>
@@ -82,7 +87,7 @@
 		<input type = "text" name = "answer_input"/> <br>
 		<label for = 'recommendation_input'> What Would You Recommend? </label>
 		<textarea name = 'recommendation_input' style = 'height: 200px'> </textarea>
-		<input type = "submit" name = "submit" value = "submit"/>
+		<input type = "submit" name = "submit" value = "Submit"/>
 	</form>
 </div> <!-- end of content area -->
 </body>

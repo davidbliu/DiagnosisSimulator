@@ -52,7 +52,7 @@ function getSymptoms(symptom_type) {
   });
 }
 $(document).ready(function(){
-    $('.symptom_type_div').click(function(){
+    $('.symptom_type_class').click(function(){
         getSymptoms($(this).text());
     });
 });

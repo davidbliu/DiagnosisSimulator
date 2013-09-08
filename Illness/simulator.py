@@ -81,6 +81,8 @@ def simulator_view(request, illnessID = "0"):
 	args['illness'] = illness
 	args['symptoms'] = symptoms
 	args['symptom_types'] = SymptomType.objects.all()
+	args['body_parts'] = get_body_parts()
+	print(args['body_parts'])
 	# for choice in symptom_type_choices:
 		# args['symptom_types'].append(choice[1])
 	args.update(csrf(request))
@@ -102,3 +104,12 @@ def check_recommendation(user_recommendation, illness, thresh):
 			print 'im returning correct for recommendation ' + user_recommendation
 			return 'correct'
 	return 'unknown'
+
+def get_body_parts():
+	body_parts = []
+	for general_area in BodyArea.objects.all():
+		# body_dict[general_area] = SymptomType.objects.filter(body_area = general_area)
+		entry = {'general_area' : general_area, 'symptom_types':SymptomType.objects.filter(body_area = general_area)}
+		body_parts.append(entry)
+	print body_parts
+	return body_parts

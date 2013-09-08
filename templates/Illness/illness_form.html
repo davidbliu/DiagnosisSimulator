@@ -13,25 +13,46 @@
 		<li> {{symptom.description}} </li>
 		{% endfor %}
 	</ul>
+	<ul> Recommendations
+		{% for rec in recommendations %}
+		<li> {{rec.recommendation}} </li>
+		{% endfor %}
+	</ul>
 	<b> choose symptom to add </b><br>
-	
-	<label for = 'search_bar'> Search Symptoms </label>
+	<label for = 'search_bar'> Search Existing Symptoms </label>
 	<input type = 'text' class = 'search_term' name = 'search_bar' value = ''/>
-	<button class = 'submit_search_button'>filter</button>
-	<form method = "post" action = ""> 
+	<!-- <button class = 'submit_search_button'>filter</button> -->
+	<form method = "post"> 
 		{% csrf_token %}
 		{% for symptom in all_symptoms %}
-		<label class = 'old_symptom' id = '{{symptom.description}}' for = '{{symptom.description}}'> {{symptom.description}} </label>
-		<input class = 'old_symptom' id = '{{symptom.description}}' type = 'checkbox' name = 'old_symptom' value = '{{symptom.description}}'/>
+		<div class = 'old_symptom' id = '{{symptom.description}}'>
+			<input type = 'checkbox' name = 'old_symptom' value = '{{symptom.description}}'/>
+			<label for = '{{symptom.description}}'> {{symptom.description}} </label>
+		</div>
 		{% endfor %}
-		 <input type = 'submit' name = 'submit_old' value = 'submit'/>
+		 <input type = 'submit' name = 'submit_old' value = 'Submit'/>
 	</form>
-
-	<b> or create a custom symptom </b>
-	<form method = 'post' action = ''>
+	<form method = 'post'>
 		{% csrf_token %}
 		{{symptom_form}}
-		<input type = 'submit' name = 'submit' value = 'submit' />
+		<input type = 'submit' name = 'submit' value = 'Submit' />
+	</form>
+
+	<b> choose recommendation to add </b><br>
+	<label for = 'rec_search_bar'> Search Existing Recommendations </label>
+	<input type = 'text' class = 'rec_search_term' name = 'rec_search_bar' value = ''/>
+	<form method = "post"> 
+		{% csrf_token %}
+		{% for rec in all_recommendations %}
+		<div class = 'old_recommendation' id = '{{rec.recommendation}}'>
+			<input type = 'checkbox' name = 'old_recommendation' value = '{{rec.recommendation}}'/>
+			<label for = '{{rec.recommendation}}'> {{rec.recommendation}} </label>
+		</div>
+		{% endfor %}
+		 <input type = 'submit' name = 'submit_old' value = 'Submit'/>
+	</form>
+	<form method = "post">
+		{% csrf_token %}
 		{{recommendation_form}}
 		<input type = 'submit' name = 'submit_new_recommendation'/>
 	</form>

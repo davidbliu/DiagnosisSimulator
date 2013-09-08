@@ -6,6 +6,7 @@ from django.forms import ModelForm
 from django.template import RequestContext
 from django.core.context_processors import csrf
 import json
+import quopri
 
 def illness_list_view (request):
 	illness_list = Illness.objects.all()
@@ -56,6 +57,7 @@ def illness_form (request, illnessID = '0'):
 		if 'submit_old' in request.POST:
 			symptoms = request.POST.getlist('old_symptom')
 			print symptoms
+			print 'are the symptoms'
 			for symp in symptoms:
 				try:
 					symptom = Symptom.objects.get(description = symp)
@@ -75,9 +77,11 @@ def illness_form (request, illnessID = '0'):
 				return HttpResponseRedirect('/illness_form/'+illnessID)
 	args = {}
 	args['all_symptoms'] = Symptom.objects.all()
+	args['all_recommendations'] = Recommendation.objects.all()
 	args['symptom_form'] = SymptomForm()
 	args['recommendation_form'] = RecommendationForm()
 	args['symptoms'] = getSymptoms(Illness.objects.get(id = illnessID))
+	args['recommendations'] = getRecommendations(Illness.objects.get(id = illnessID))
 	args['illness'] = illness
 	# args['symptom_types'] = Symptom.objects.values_list('symptom_type', flat = True).distinct()
 	args.update(csrf(request))
@@ -102,3 +106,14 @@ def getSymptoms(illness):
 	for mapping in symp_maps:
 		symptoms.append(mapping.symptom)
 	return symptoms
+#returns a list of recommendations for the input illness
+def getRecommendations(illness):
+	recommendations = []
+	maps = IllnessRecommendation.objects.filter(illness = illness)
+	for mapping in maps:
+		recommendations.append(mapping.recommendation)
+	return recommendations
+
+def createIllnessSymptomMapping(illness, symptom_string):
+	# symptom = Symptom.objects.get(description = symptom_string)
+	return 0
