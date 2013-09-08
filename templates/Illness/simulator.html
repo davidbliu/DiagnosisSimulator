@@ -7,23 +7,27 @@
 	</script>
 	<script type = 'text/javascript' src = '{% static 'js/simulator.js' %}'></script>
 	<style type = 'text/css'>
-	/*.symptom_type_div {
-		border: 1px dotted black;
-		padding: 5px;
-		display: inline-block;
-		background-color: red;
-	}*/
+	.symptom_type_div {
+	}
 	.symptom_type_div:hover {
 		cursor: pointer;
 		font-weight: bold;
 	}
 	.patient_responses {
-		border: 1px solid black;
-		height: 200px;
+		border: 1px dotted black;
+		height: 150px;
 		width: 400px;
-		position: absolute;
-		left: 400px;
 		overflow: auto;
+		margin: 3px;
+	}
+	#wrong_list li{
+		color: red;
+	}
+	#right_list li{
+		color: green;
+	}
+	#missing_list li{
+		color:orange;
 	}
 	</style>
 </head>
@@ -31,19 +35,55 @@
 <body>
 <h1>Simulator for illness : {{ illness.name }}</h1>
 <a href = '/list'>Back to List</a><br>
-<div class = 'patient_responses'>
-	<b>Patient Responses</b>
-	<div class = 'responses'></div>
-</div>
-<b>Choose a part of the patient to examine:</b><br>
-{% for symptom_type in symptom_types %}
-<div class = 'symptom_type_div' id =  '{{symptom_type}}'>{{symptom_type}}</div>
-{% endfor %}
 
-<ul>
-	{% for symptom in symptoms %}
-	<li>{{ symptom }}</li>
+<span>{{ message }}</span><br>
+{% if wrong_symptoms %}
+	<ul id = 'wrong_list'> These symptoms dont match your diagnosis
+	{% for symptom in wrong_symptoms %}
+	<li>{{ symptom.description }} ({{ symptom.symptom_type }})</li>
 	{% endfor %}
-</ul>
+	</ul>
+
+	<ul id = 'right_list'> Your were close, our patient did experience
+	{% for symptom in right_symptoms %}
+	<li>{{ symptom.description }} ({{ symptom.symptom_type }})</li>
+	{% endfor %}
+	</ul>
+
+	<ul id = 'missing_list'> And what about these symptoms?
+	{% for symptom in missing_symptoms %}
+	<li>{{ symptom.description }} ({{ symptom.symptom_type }})</li>
+	{% endfor %}
+	</ul>
+	<u1 id = 'recommendation_list'>You Recommended
+		{% for recommendation in user_recommendations %}
+		<li> {{recommendation}} </li>
+		{% endfor %}
+	</ul>
+{% endif %}
+
+<div id = 'content_area'>
+	<b>Choose a part of the patient to examine:</b><br>
+	<div class = 'body_area'>
+		<!-- <img src = '{% static "images/blankBody.jpg" %}' width = 200></img> -->
+		{% for symptom_type in symptom_types %}
+		<div class = 'symptom_type_div' id =  '{{symptom_type.name}}'>{{symptom_type.name}}</div>
+	{% endfor %}
+	</div>
+	<div id = 'response_wrapper'>
+		<b>Patient Responses</b>
+		<div class = 'patient_responses'>
+			<div class = 'responses'></div>
+		</div>
+	</div>
+	<form class = 'answer_form' method = "POST" action = "">
+		{% csrf_token %}
+		<label for = "answer_input"> What Illness Does the Patient Have? </label>
+		<input type = "text" name = "answer_input"/> <br>
+		<label for = 'recommendation_input'> What Would You Recommend? </label>
+		<textarea name = 'recommendation_input' style = 'height: 200px'> </textarea>
+		<input type = "submit" name = "submit" value = "submit"/>
+	</form>
+</div> <!-- end of content area -->
 </body>
 </html>

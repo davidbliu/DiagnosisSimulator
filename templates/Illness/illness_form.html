@@ -1,5 +1,8 @@
+{% load static %}
 <html>
 <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src = '{% static 'js/illness_form.js' %}'></script>
 </head>
 
 <body>
@@ -11,17 +14,26 @@
 		{% endfor %}
 	</ul>
 	<b> choose symptom to add </b><br>
-	{% for symptom in all_symptoms %}
+	
+	<label for = 'search_bar'> Search Symptoms </label>
+	<input type = 'text' class = 'search_term' name = 'search_bar' value = ''/>
+	<button class = 'submit_search_button'>filter</button>
 	<form method = "post" action = ""> 
 		{% csrf_token %}
-		<input name = 'submit_existing' value = '{{symptom.description}}' type = 'submit' /> 
+		{% for symptom in all_symptoms %}
+		<label class = 'old_symptom' id = '{{symptom.description}}' for = '{{symptom.description}}'> {{symptom.description}} </label>
+		<input class = 'old_symptom' id = '{{symptom.description}}' type = 'checkbox' name = 'old_symptom' value = '{{symptom.description}}'/>
+		{% endfor %}
+		 <input type = 'submit' name = 'submit_old' value = 'submit'/>
 	</form>
-	{% endfor %}
+
 	<b> or create a custom symptom </b>
 	<form method = 'post' action = ''>
 		{% csrf_token %}
 		{{symptom_form}}
 		<input type = 'submit' name = 'submit' value = 'submit' />
+		{{recommendation_form}}
+		<input type = 'submit' name = 'submit_new_recommendation'/>
 	</form>
 
 </body>

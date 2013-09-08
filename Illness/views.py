@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from Illness.models import Illness, Symptom, IllnessSymptom
+from Illness.models import Illness, Symptom, IllnessSymptom, Recommendation, IllnessRecommendation
 from django import forms
 from django.forms import ModelForm
 from django.template import RequestContext
 from django.core.context_processors import csrf
+import json
 
 def illness_list_view (request):
 	illness_list = Illness.objects.all()
@@ -44,19 +45,26 @@ def add_illness_form(request):
 class SymptomForm (ModelForm):
 	class Meta:
 		model = Symptom
+class RecommendationForm(ModelForm):
+	class Meta: 
+		model = Recommendation
 def illness_form (request, illnessID = '0'):
 	illness = Illness.objects.get(id = illnessID)
 	if request.method == "POST":
+		print request.POST
 		# if you are submitting an existing symptom, simple add a mapping for illness and symptom to IllnessSymptom table
-		if 'submit_existing' in request.POST:
-			symptom = Symptom.objects.get(description = request.POST.get('submit_existing'))
-			#create new mapping between that symptom and the illness
-			new_mapping = IllnessSymptom(illness = illness, symptom = symptom)
-			try:
-				new_mapping.save()
-			except:
-				print 'duplicate mappings'
-				# TODO: dont even show duplicate mappings
+		if 'submit_old' in request.POST:
+			symptoms = request.POST.getlist('old_symptom')
+			print symptoms
+			for symp in symptoms:
+				try:
+					symptom = Symptom.objects.get(description = symp)
+					# create new mappingping between that symptom and the illness
+					new_mapping = IllnessSymptom(illness = illness, symptom = symptom)
+					new_mapping.save()
+				except:
+					print 'duplicate mappings'
+					# TODO: dont even show duplicate mappings
 		else:
 			posted_form = SymptomForm(request.POST)
 			if posted_form.is_valid():
@@ -68,12 +76,25 @@ def illness_form (request, illnessID = '0'):
 	args = {}
 	args['all_symptoms'] = Symptom.objects.all()
 	args['symptom_form'] = SymptomForm()
+	args['recommendation_form'] = RecommendationForm()
 	args['symptoms'] = getSymptoms(Illness.objects.get(id = illnessID))
 	args['illness'] = illness
 	# args['symptom_types'] = Symptom.objects.values_list('symptom_type', flat = True).distinct()
 	args.update(csrf(request))
 	return render_to_response('Illness/illness_form.html', args)
 
+# will always be a get request, filters out all but symptoms with the keyword in their descriptions
+def filter_symptom_view(request):
+	bad_symptoms = []
+	keyword = request.GET.get('filter_term')
+	for symptom in Symptom.objects.all():
+		if keyword not in symptom.description:
+			bad_symptoms.append(symptom.description)
+	print keyword
+	print bad_symptoms
+	args = {}
+	args['bad_symptoms'] = bad_symptoms
+	return HttpResponse(json.dumps(args), mimetype='application/json')
 #returns a list of symptoms associated with the input parameter illness
 def getSymptoms(illness):
 	symptoms = []
