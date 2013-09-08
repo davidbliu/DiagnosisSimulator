@@ -12,7 +12,7 @@
 		font-weight: bold;
 	}
 	.patient_responses {
-		border: 1px dotted black;
+		border: 1px solid black;
 		height: 150px;
 		width: 400px;
 		overflow: auto;
@@ -25,7 +25,23 @@
 		color: green;
 	}
 	#missing_list li{
-		color:orange;
+		color: orange;
+	}
+	.recommendation_list li{
+		color: black;
+	}
+	.answer_form {
+		background-color:rgba(0,0,0,0.1);
+		padding:5px;
+	}
+	.right_rec {
+		color: green;
+	}
+	.wrong_rec {
+		color: red;
+	}
+	html {
+		font-family: georgia;
 	}
 	</style>
 </head>
@@ -53,12 +69,17 @@
 	<li>{{ symptom.description }} ({{ symptom.symptom_type }})</li>
 	{% endfor %}
 	</ul>
-	<u1 id = 'recommendation_list'>You Recommended
-		{% for recommendation in user_recommendations %}
-		<li> {{recommendation}} </li>
+	
+{% endif %}
+	<ul id = 'recommendation_list'> You Recommended
+		{% for rec in user_recommendations %}
+			{% if rec in correct_recommendations %}
+			<li class = 'right_rec'> {{rec}} </li> 
+			{% else %}
+			<li class = 'wrong_rec'> {{rec}} </li>
+			{% endif %}
 		{% endfor %}
 	</ul>
-{% endif %}
 
 <div id = 'content_area'>
 	<b>Choose a part of the patient to examine:</b><br>
@@ -85,10 +106,24 @@
 		{% csrf_token %}
 		<label for = "answer_input"> What Illness Does the Patient Have? </label>
 		<input type = "text" name = "answer_input"/> <br>
-		<label for = 'recommendation_input'> What Would You Recommend? </label>
-		<textarea name = 'recommendation_input' style = 'height: 200px'> </textarea>
+
+		<!-- <label for = 'recommendation_input'> What Would You Recommend? </label> -->
+		<!-- <textarea name = 'recommendation_input' style = 'height: 200px'> </textarea> -->
+		<span> What Would You Recommend? </span> 
+
+		<br>
+		<!-- <label for = 'rec_search_bar'> Search Existing Recommendations </label> -->
+		<!-- <input type = 'text' class = 'rec_search_term' name = 'rec_search_bar' value = ''/> -->
+		{% for rec in all_recommendations %}
+		<div class = 'user_rec' id = '{{rec.recommendation}}'>
+			<input type = 'checkbox' name = 'user_rec' value = '{{rec.recommendation}}'/>
+			<label for = '{{rec.recommendation}}'> {{rec.recommendation}} </label>
+		</div>
+		{% endfor %}
 		<input type = "submit" name = "submit" value = "Submit"/>
 	</form>
+
+		
 </div> <!-- end of content area -->
 </body>
 </html>

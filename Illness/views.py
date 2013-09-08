@@ -54,27 +54,27 @@ def illness_form (request, illnessID = '0'):
 	if request.method == "POST":
 		print request.POST
 		# if you are submitting an existing symptom, simple add a mapping for illness and symptom to IllnessSymptom table
-		if 'submit_old' in request.POST:
+		if 'submit_old_symptom' in request.POST:
 			symptoms = request.POST.getlist('old_symptom')
-			print symptoms
-			print 'are the symptoms'
 			for symp in symptoms:
-				try:
-					symptom = Symptom.objects.get(description = symp)
-					# create new mappingping between that symptom and the illness
-					new_mapping = IllnessSymptom(illness = illness, symptom = symptom)
-					new_mapping.save()
-				except:
-					print 'duplicate mappings'
-					# TODO: dont even show duplicate mappings
-		else:
+				symptom = Symptom.objects.get(description = symp)
+				createISMapping(illness, symptom)
+		elif 'submit_symptom' in request.POST:
 			posted_form = SymptomForm(request.POST)
 			if posted_form.is_valid():
 				posted_form.save()
-				# also make a new mapping between the symptom and the current illness
-				new_mapping = IllnessSymptom(illness = illness, symptom = posted_form.instance)
-				new_mapping.save()
-				return HttpResponseRedirect('/illness_form/'+illnessID)
+				createISMapping(illness, posted_form.instance)
+		elif 'submit_old_rec' in request.POST:
+			recs = request.POST.getlist('old_recommendation')
+			for rec in recs:
+				recommendation = Recommendation.objects.get(recommendation = rec)
+				createIRMapping(illness, recommendation)
+		elif 'submit_rec' in request.POST:
+			posted_form = RecommendationForm(request.POST)
+			if posted_form.is_valid():
+				posted_form.save()
+				createIRMapping(illness, posted_form.instance)
+		return HttpResponseRedirect('/illness_form/'+illnessID)
 	args = {}
 	args['all_symptoms'] = Symptom.objects.all()
 	args['all_recommendations'] = Recommendation.objects.all()
@@ -114,6 +114,17 @@ def getRecommendations(illness):
 		recommendations.append(mapping.recommendation)
 	return recommendations
 
-def createIllnessSymptomMapping(illness, symptom_string):
-	# symptom = Symptom.objects.get(description = symptom_string)
-	return 0
+def createISMapping(illness, symptom):
+	try:
+		is_map = IllnessSymptom(illness = illness, symptom = symptom)
+		is_map.save()
+	except:
+		print 'you have a duplicate mapping'
+		#means there is a duplicate mapping
+def createIRMapping(illness, recommendation):
+	try:
+		ir_map = IllnessRecommendation(illness = illness, recommendation = recommendation)
+		ir_map.save()
+	except:
+		print 'you have a duplicate mapping'
+		#means there is a duplicate mapping

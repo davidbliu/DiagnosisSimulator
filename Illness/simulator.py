@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from Illness.models import *
+from Illness.views import *
 from django import forms
 from django.forms import ModelForm
 from django.template import RequestContext
@@ -73,15 +74,23 @@ def simulator_view(request, illnessID = "0"):
 			args['message'] = 'sorry that is an invalid illness'
 		# handle the recommendations
 		print 'these were the recommendations'
-		args['user_recommendations'] = request.POST.get('recommendation_input').split('\n')
-		for rec in args['user_recommendations']:
-			temp = check_recommendation(rec, illness, 3)
-		# args['recommendations'] = 
+		user_recs = request.POST.getlist('user_rec')
+		print user_recs
+		args['user_recommendations'] = user_recs
+		args['correct_recommendations'] = []
+		correct_recs = getRecommendations(illness)
+		for rec in correct_recs:
+			args['correct_recommendations'].append(rec.recommendation)
+		print 'these are users'
+		print args['user_recommendations'] 
+		print 'these are correct'
+		print args['correct_recommendations'] 
 	
 	args['illness'] = illness
 	args['symptoms'] = symptoms
 	args['symptom_types'] = SymptomType.objects.all()
 	args['body_parts'] = get_body_parts()
+	args['all_recommendations'] = Recommendation.objects.all()
 	print(args['body_parts'])
 	# for choice in symptom_type_choices:
 		# args['symptom_types'].append(choice[1])

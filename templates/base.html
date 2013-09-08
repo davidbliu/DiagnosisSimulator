@@ -1,16 +1,80 @@
 <html>
 <head>
-	<title> Illness List </title>
-	</head>
+	<title> Diagnosis Simulator </title>
+	<style type = 'text/css'>
+	.sidebar {
+		/*background-color: #4099FF;*/
+		/*width: 200px;*/
+		/*height: 100%;*/
+		float: left;
+		border-radius:10px;
+	}
+	#sidebar_menu {
+		width: 200px;
+		float: left;
+		position:relative;
+		top: 10px;
+		left: 10px;
+	}
+	#sidebar_menu ul
+	{
+		font-family: georgia;
+		list-style-type:none;
+		margin:0;
+		padding:0;
+	}
+	#sidebar_menu li
+	{
+		display: inline;
+	}
+	#sidebar_menu a
+	{
+		font-family: georgia;
+		color: #fff;
+		text-decoration: none;
+		font-size: 14px;
+		display: block;
+		padding:5px;
+		/*width: 200px;*/
+		background-color: #3B5998;
+		border-bottom: 1px solid #eee;
+	}
+	#sidebar_menu a:link, #sidebar_menu a:visited
+	{
+		color: #EEE;	
+		text-decoration: none;
+	}
+	#sidebar_menu a:hover
+	{
+		/*background-color: #00BEE4;*/
+		color: #fff;
+	}
+	.content {
+		background-color:red;
+		/*width:500px;*/
+		/*height:500px;*/
+		display:inline-block;
+		position:relative;
+		left:50px;
+		top:10px;
+	}
+	</style>
+</head>
 <body>
-<h1> Illnesses List </h1>
-
-{% for illness in illnesses %}
-<ul> <a href = '/illness_form/{{illness.id}}'>{{illness.illness}}</a>
-	{% for symptom in illness.symptoms %}
-	<li> {{symptom.symptom.description}} ({{symptom.symptom.symptom_type}}) </li>
-	{% endfor %}
-</ul>
-{% endfor %}
+<div class = 'sidebar'>
+	<div id = 'sidebar_menu'>
+		<u1>
+			<li><a href = "#">Home</a></li>
+			<li><a href = "#">Edit Illnesses</a></li>
+			<li><a href = "#">Illness Handbook</a></li>
+			<li><a href = "#">Play Simulation Game</a></li>
+			<li><a href = "#">Diagnose Me</a></li>
+		<u1>
+	</div>
+</div>
+<div class = 'content'>
+	<span> here is some content for you to see </span>
+	{% block content %}{% endblock content %}
+</div>
 </body>
 </html>
