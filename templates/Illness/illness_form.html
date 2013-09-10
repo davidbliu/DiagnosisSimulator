@@ -4,19 +4,24 @@
 {% block head %}
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src = '{% static 'js/illness_form.js' %}'></script>
+	<style type = 'text/css'>
+	.gray_box {
+		background-color: rgba(0,0,0,0.1);
+		padding:5px;
+	}
+	</style>
 {% endblock head %}
 
 
 {% block content %}
 	<h1> Illness Form for {{illness}} </h1>
-	<a href = '/list' > Back to List </a>
-	<form method = "POST">
+	<form method = "post">
 		{% csrf_token %}
-		<!-- this form is for big changes like changing name or deleting the illness -->
-		<input type = 'submit' name = 'delete_input' value = 'Delete This Illness'/>
-		<input type = 'text' name = 'changename_input' value = ""/>
-		<input type = 'submit' name = 'changename_submit' value = 'Change Illness Name'/>
+		{{iform}}
+		<input type = 'submit' name = 'submit_iform' value = 'submit iform'/>
 	</form>
+
+<div class = 'old_symp_rec gray_box'>
 	<ul> Symptoms
 		{% for symptom in symptoms %}
 		<li> {{symptom.description}} </li>
@@ -27,10 +32,12 @@
 		<li> {{rec.recommendation}} </li>
 		{% endfor %}
 	</ul>
-	<b> choose symptom to add </b><br>
+</div>
+
 	
 	<!-- <button class = 'submit_search_button'>filter</button> -->
 	<form method = "post"> 
+		<b> choose symptom to add </b><br>
 		{% csrf_token %}
 		<label for = 'search_bar'> Search Existing Symptoms </label>
 		<input type = 'text' class = 'search_term' name = 'search_bar' value = ''/>
@@ -43,15 +50,16 @@
 		{% endfor %}
 		 
 	</form>
-	<form method = 'post'>
+	<form method = 'post' class = "gray_box">
 		{% csrf_token %}
 		{{symptom_form}}
 		<input type = 'submit' name = 'submit_symptom' value = 'Submit' />
 	</form>
 
-	<b> choose recommendation to add </b><br>
 	
-	<form method = "post"> 
+	
+	<form method = "post" > 
+		<b> choose recommendation to add </b><br>
 		{% csrf_token %}
 		<label for = 'rec_search_bar'> Search Existing Recommendations </label>
 		<input type = 'text' class = 'rec_search_term' name = 'rec_search_bar' value = ''/>
@@ -63,9 +71,11 @@
 		</div>
 		{% endfor %}
 	</form>
-	<form method = "post">
+	<form method = "post" class = "gray_box">
 		{% csrf_token %}
 		{{recommendation_form}}
 		<input type = 'submit' name = 'submit_rec'/>
 	</form>
+
+
 {% endblock content %}

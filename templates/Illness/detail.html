@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Detail view for {{ illness.name }}</h1>
+<a href = '/illness_form/{{illness.id}}'> edit illness </a>
+<ul> <b>Symptoms</b>
+	{% for symp in symptoms %}
+	<li>{{symp.description}}
+		{% if symp.image %}
+		<li><img src = '{{symp.image}}' height = 100 width = 100></img></li>
+		{% endif %} 
+	</li>
+
+	{% endfor %}
+</ul>
+
+<ul> <b>Recommendations</b>
+	</ul>
+{% endblock content %}

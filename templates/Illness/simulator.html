@@ -44,15 +44,30 @@
 	html {
 		font-family: georgia;
 	}
+	.feedback_wrapper {
+		display: none;
+		padding: 5px;
+		{% if right_symptoms or wrong_symptoms or missing_symptoms or message %}
+		display: block;
+		{% endif %}
+		{% if result %}
+		background-color: rgba(0,250,250,0.1);
+		{% else %}
+		background-color:rgba(250,0,250,0.1);
+		{% endif %}
+		/*background-color:rgba(0,0,0,0.1);*/
+	}
+	
 	</style>
 {% endblock head %}
 
 {% block content %}
 <h1>Simulator for illness : {{ illness.name }}</h1>
-<a href = '/list'>Back to List</a><br>
 
-<span>{{ message }}</span><br>
-{% if wrong_symptoms %}
+
+<div class = 'feedback_wrapper'>
+	<b> Feedback </b> <br>
+	<span>{{ message }}</span><br>
 	<ul id = 'wrong_list'> These symptoms dont match your diagnosis
 	{% for symptom in wrong_symptoms %}
 	<li>{{ symptom.description }} ({{ symptom.symptom_type }})</li>
@@ -70,8 +85,7 @@
 	<li>{{ symptom.description }} ({{ symptom.symptom_type }})</li>
 	{% endfor %}
 	</ul>
-	
-{% endif %}
+
 	<ul id = 'recommendation_list'> You Recommended
 		{% for rec in user_recommendations %}
 			{% if rec in correct_recommendations %}
@@ -81,6 +95,7 @@
 			{% endif %}
 		{% endfor %}
 	</ul>
+</div>
 
 <div id = 'content_area'>
 	<b>Choose a part of the patient to examine:</b><br>

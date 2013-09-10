@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1> Home View </h1>
+
+
+<div id = 'illness_type_wrapper'>
+All Disease Types
+<ul> 
+	{% for itype in illness_types %}
+	<li> <a href = '#'>{{itype.name}}</a> </li>
+	{% endfor %}
+</ul>
+</div>
+
+<div id = 'illness_wrapper'>
+All Illnesses
+<ul> 
+	{% for ill in illnesses %}
+	<li> <a href = '/detail/{{ill.id}}'>{{ill.name}}</a> </li>
+	{% endfor %}
+</ul>
+</div>
+{% endblock content %}

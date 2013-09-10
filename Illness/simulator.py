@@ -33,7 +33,6 @@ def get_symptoms_view(request):
 		sym = mapping.symptom
 		if sym.symptom_type == symptom_type:
 			symptom_list.append(sym.description)
-	print symptom_list
 	args['symptom_list'] = symptom_list
 	# return HttpResponse('hi there')
 	return HttpResponse(json.dumps(args), mimetype='application/json')
@@ -47,9 +46,11 @@ def simulator_view(request, illnessID = "0"):
 		symptoms.append(mapping.symptom)
 
 	if request.method == "POST":
+		args['result'] = False
 		try: 
 			answered_illness = Illness.objects.get(name = request.POST.get('answer_input'))
 			if answered_illness == illness:
+				args['result'] = True
 				args['message'] = 'you got it right! the illness was '+request.POST.get('answer_input')
 			else:
 				# guessed the answer wrong so display the differences in symptoms
@@ -69,8 +70,10 @@ def simulator_view(request, illnessID = "0"):
 				for symptom in symptoms:
 					if symptom not in ans_symptoms:
 						args['missing_symptoms'].append(symptom)
+				print args['right_symptoms']
+				print args['wrong_symptoms']
+				print 'these are right and wrong symptoms'
 		except: 
-			print 'your entered an invalid illness'
 			args['message'] = 'sorry that is an invalid illness'
 		# handle the recommendations
 		print 'these were the recommendations'
@@ -81,10 +84,6 @@ def simulator_view(request, illnessID = "0"):
 		correct_recs = getRecommendations(illness)
 		for rec in correct_recs:
 			args['correct_recommendations'].append(rec.recommendation)
-		print 'these are users'
-		print args['user_recommendations'] 
-		print 'these are correct'
-		print args['correct_recommendations'] 
 	
 	args['illness'] = illness
 	args['symptoms'] = symptoms

@@ -1,16 +1,17 @@
 from django.db import models
 
+class IllnessType(models.Model):
+	name = models.CharField(max_length = 300, unique = True)
+	image = models.URLField(blank = True)
+	def __str__(self):
+		return '%s ' % self.name
 # Create your models here.
 class Illness(models.Model):
 	name = models.CharField(max_length=300, unique = True)
 	description = models.TextField(blank = True)
+	illness_type = models.ForeignKey(IllnessType, blank = True, null = True)
 	def __str__(self):
 		return '%s' % (self.name)
-
-# symptom_type_choices = (('head','head'),('ears','ears'),('eyes','eyes'),
-# 	('nose/mouth','nose and mouth'),('neck/throat','neck and throat'),('history', 'history'), ('time' ,'time'))
-
-# body_parts = ('head', 'neck', 'chest', 'abdomen', 'pelvis', 'legs', 'arms', 'back')
 
 class BodyArea(models.Model):
 	name = models.CharField(max_length = 300, unique = True)
@@ -28,6 +29,7 @@ class SymptomType(models.Model):
 class Symptom(models.Model):
 	symptom_type = models.ForeignKey(SymptomType)
 	description = models.TextField()
+	image = models.URLField(blank= True)
 	def __str__(self):
 		return '%s ' % self.description
 	class Meta:
@@ -35,7 +37,6 @@ class Symptom(models.Model):
 
 class Recommendation(models.Model):
 	recommendation = models.TextField(unique = True)
-	# recommendation_type = models.CharField(max_length = 300, blank = True)
 	def __str__(self):
 		return '%s ' % self.recommendation
 
@@ -54,3 +55,7 @@ class IllnessSymptom(models.Model):
 		return '%s %s' % (self.illness, self.symptom)
 	class Meta:
 		unique_together = ('illness', 'symptom')
+
+class Link(models.Model):
+	link = models.URLField()
+	description = models.TextField()

@@ -1,13 +1,27 @@
 {% extends 'base.html' %}
+
+{% block head %}
+<style type = 'text/javascript'>
+.entry_wrapper {
+	display: inline-block;
+}
+</style>
+{% endblock head %}
+
 {% block content %}
 <h1> Illnesses List </h1>
 <a href = '/add_illness_form'>Add new illness</a>
 {% for entry in entries %}
-<ul><a href = '#'>{{entry.illness}}</a> (<a href = '/illness_form/{{entry.illness.id}}' >edit</a>)
-	{% for symptom in entry.symptoms %}
+<div class = 'entry_wrapper'>
+	<a href = '/detail/{{entry.illness.id}}'>
+	<!-- <img src = '{{entry.illness_type.image}}' height = 100 width = 100></img> -->
+	{{entry.illness}}
+	</a> 
+
+	<!-- {% for symptom in entry.symptoms %}
 	<li> {{symptom.symptom.description}} ({{symptom.symptom.symptom_type}}) </li>
-	{% endfor %}
-</ul>
+	{% endfor %} -->
+</div>
 {% endfor %}
 
 {% endblock content %}
